@@ -86,8 +86,6 @@ fixDef.restitution = .2;
 		new Box2D.Common.Math.b2Vec2(-.2, 0),
 		new Box2D.Common.Math.b2Vec2(0, -2)
 	];
-	var legPolygon = new Box2D.Collision.Shapes.b2PolygonShape;
-	legPolygon.Set(legVerticies, 4);
 
 		var playerHingeBodyDef = new Box2D.Dynamics.b2BodyDef;
 			playerHingeBodyDef.type = Box2D.Dynamics.b2Body.b2_dynamicBody;
@@ -115,6 +113,7 @@ fixDef.restitution = .2;
 			playerLegBodyDef.position.y = 5;
 
 	world.CreateBody(playerHingeBodyDef).CreateFixture(playerHingeFixtureDef);
+	world.CreateBody(playerLegBodyDef).CreateFixture(playerLegFixtureDef);
 
 var bodyDef = new Box2D.Dynamics.b2BodyDef;
 
