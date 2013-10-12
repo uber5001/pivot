@@ -4,6 +4,7 @@
  */
 
 var PREGAME_TIMER = 5000;
+var MAX_GAME_TIMER = 300000;
 
 var WebSocketServer = require('ws').Server
   , wss = new WebSocketServer({port: 8080});
@@ -85,13 +86,16 @@ function Server() {
     }
     
     this.start = function() {
-        //var startingPlayers = 
         if(this.started) return;
+
+        var startingPlayers = this.players.length;
+        var stopMsgs = 0;
+        var stopped = false;
         this.started = true;
         setTimeout(function() {
                 self.stop();
             }
-        , 300000); //5 minutes
+        , MAX_GAME_TIMER); //Auto stop in 5 minutes
         
         var inputs = [];
         
@@ -106,6 +110,20 @@ function Server() {
                     input = Math.min(1, input);
                     inputs[this.index] = input;
                 }
+                else if(msg.type == 'stop') {
+                    stopMsgs++;
+                    if(!stopped && stopMsgs/startingPlayers > .5) {
+                        stopped = true;
+                        setTimeout(function() {
+                            if(stopMsgs == startingPlayers)
+                                self.stop();
+                            else {
+                                console.log(stopMsgs+" out of "+startingPlayers+" reported a game stop.");
+                            }
+                        }
+                        , 5000);
+                    }
+                }
             });
         }
         
@@ -119,7 +137,9 @@ function Server() {
     }
     
     this.stop = function() {
-        //TODO
+        var index = serverlist.indexOf(this);
+        if(index != -1) serverlist.splice(index, 1);
+        else console.log("Server to be removed not found, wat");
     }
 }
 
