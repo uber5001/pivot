@@ -34,12 +34,10 @@ function PivotGame(playerCount, debugContext) {
 	var tmp = new Box2D.Collision.Shapes.b2PolygonShape;
 		tmp.SetAsBox(4, 1);
 	var platform = new Platform(world, 10, 10, tmp);
-	var tmp = new Box2D.Collision.Shapes.b2PolygonShape;
-		tmp.SetAsBox(5, 1);
 	var platform = new Platform(world, 20, 20, tmp);
-	var tmp = new Box2D.Collision.Shapes.b2PolygonShape;
-		tmp.SetAsBox(5, 1);
-	var platform = new Platform(world, 0, 20, tmp);
+	var tmp2 = new Box2D.Collision.Shapes.b2PolygonShape;
+		tmp2.SetAsBox(5, 1);
+	var platform = new Platform(world, 0, 20, tmp2);
 
 	var debugDraw = new Box2D.Dynamics.b2DebugDraw;
 	debugDraw.SetSprite(debugContext);

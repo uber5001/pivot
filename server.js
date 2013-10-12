@@ -3,6 +3,8 @@
  * Scott Little
  */
 
+var PREGAME_TIMER = 5000;
+
 var WebSocketServer = require('ws').Server
   , wss = new WebSocketServer({port: 8080});
   
@@ -13,6 +15,7 @@ wss.on('connection', function(ws) {
     console.log("Incoming Connection");
     
     var hasJoined = false;
+    this.name = "Scott";
     
     for(var i=0; i<serverlist.length; i++) {
         if(serverlist[i].started) continue;
@@ -42,18 +45,38 @@ function Server() {
     
     this.join = function(ws) {
         this.players.push(ws);
-
-        /*if(this.players.length == 1) {
-            self.start();
-            //just gogogo
-        }*/
         
         if(this.players.length == 2) {
-            setTimeout(function() {
+            /*setTimeout(function() {
                 self.start();
             }
-            , 10000);
-            // , 30000);
+            , PREGAME_TIMER);*/
+            var time = PREGAME_TIMER+1000;
+            var interval = setInterval(function() {
+                time -= 1000;
+                if(time == 0) {
+                    var msg = JSON.stringify({"message":"BEGIN!", "type":"broadcast"});
+                    for(var i=0; i<self.players.length; i++) {
+                        self.players[i].send(msg);
+                    }
+                    self.start();
+                    setTimeout(function() {
+                        var msg = JSON.stringify({"message":"", "type":"broadcast"});
+                        for(var i=0; i<self.players.length; i++) {
+                            self.players[i].send(msg);
+                        }
+                    }
+                    , 1000)
+                    clearInterval(interval);
+                }
+                else {
+                    var msg = JSON.stringify({"message":time/1000, "type":"broadcast"});
+                    for(var i=0; i<self.players.length; i++) {
+                        self.players[i].send(msg);
+                    }
+                }
+            }
+            , 1000);
         }
         
         else if(this.players.length == 10) { //or 30 sec after first player join
@@ -62,6 +85,7 @@ function Server() {
     }
     
     this.start = function() {
+        //var startingPlayers = 
         if(this.started) return;
         this.started = true;
         setTimeout(function() {
