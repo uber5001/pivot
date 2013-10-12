@@ -17,6 +17,8 @@ var PLAYER_JOINT_SPEED = 10;
 
 var GRAVITY = 10;
 
+var TIMESCALE = 1;
+
 function PivotGame(playerCount, debugContext) {
 
 	var world = new Box2D.Dynamics.b2World(
@@ -32,6 +34,12 @@ function PivotGame(playerCount, debugContext) {
 	var tmp = new Box2D.Collision.Shapes.b2PolygonShape;
 		tmp.SetAsBox(4, 1);
 	var platform = new Platform(world, 10, 10, tmp);
+	var tmp = new Box2D.Collision.Shapes.b2PolygonShape;
+		tmp.SetAsBox(5, 1);
+	var platform = new Platform(world, 20, 20, tmp);
+	var tmp = new Box2D.Collision.Shapes.b2PolygonShape;
+		tmp.SetAsBox(5, 1);
+	var platform = new Platform(world, 0, 20, tmp);
 
 	var debugDraw = new Box2D.Dynamics.b2DebugDraw;
 	debugDraw.SetSprite(debugContext);
@@ -45,7 +53,7 @@ function PivotGame(playerCount, debugContext) {
 		joo.SetMotorSpeed( (left ? -PLAYER_JOINT_SPEED : 0) + (right ? PLAYER_JOINT_SPEED : 0) );
 	}
 
-	this.timeScale = .5;
+	this.timeScale = TIMESCALE;
 
 	this.render = function(context) {
 		//TODO: real drawing pls
