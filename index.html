@@ -96,16 +96,17 @@
 					var legPolygon = new Box2D.Collision.Shapes.b2PolygonShape;
 					legPolygon.Set(legVerticies, 4);
 
+						var playerHingeBodyDef = new Box2D.Dynamics.b2BodyDef;
+							playerHingeBodyDef.type = Box2D.Dynamics.b2Body.b2_dynamicBody;
+							playerHingeBodyDef.position.x = 10;
+							playerHingeBodyDef.position.y = 5;
+
 						var playerHingeFixtureDef = new Box2D.Dynamics.b2FixtureDef;
 							playerHingeFixtureDef.density = 1;
 							playerHingeFixtureDef.friction = .8;
 							playerHingeFixtureDef.restitution = .2;
 							playerHingeFixtureDef.shape = new Box2D.Collision.Shapes.b2CircleShape(.2);
 
-						var playerHingeBodyDef = new Box2D.Dynamics.b2BodyDef;
-							playerHingeBodyDef.type = Box2D.Dynamics.b2Body.b2_staticBody;
-							playerHingeBodyDef.position.x = 10;
-							playerHingeBodyDef.position.y = 5;
 
 
 						var playerLegFixtureDef = new Box2D.Dynamics.b2FixtureDef;
@@ -113,15 +114,14 @@
 							playerLegFixtureDef.friction = .8;
 							playerLegFixtureDef.restitution = .2;
 							playerLegFixtureDef.shape = new Box2D.Collision.Shapes.b2PolygonShape;
-							playerLegFixtureDef.shape.SetAsBox();
+							playerLegFixtureDef.shape.Set(legVerticies, 4);
 
 						var playerLegBodyDef = new Box2D.Dynamics.b2BodyDef;
-							playerLegBodyDef.type = Box2D.Dynamics.b2Body.b2_staticBody;
+							playerLegBodyDef.type = Box2D.Dynamics.b2Body.b2_dynamicBody;
 							playerLegBodyDef.position.x = 10;
 							playerLegBodyDef.position.y = 5;
 
-
-
+					world.CreateBody(playerHingeBodyDef).CreateFixture(playerHingeFixtureDef);
 
 				var bodyDef = new Box2D.Dynamics.b2BodyDef;
 
@@ -131,6 +131,7 @@
 				fixDef.shape = new Box2D.Collision.Shapes.b2PolygonShape;
 				fixDef.shape.SetAsBox(4, 1);
 				world.CreateBody(bodyDef).CreateFixture(fixDef);
+				/*
 
 					bodyDef.type = Box2D.Dynamics.b2Body.b2_dynamicBody;
 					fixDef.shape = new Box2D.Collision.Shapes.b2PolygonShape;
@@ -160,7 +161,7 @@
 						jointDef.motorSpeed = 10;
 						jointDef.enableMotor = true;
 						var joo = world.CreateJoint(jointDef);
-
+				*/
 							var debugDraw = new Box2D.Dynamics.b2DebugDraw;
 							debugDraw.SetSprite(document.getElementById("canvas").getContext("2d"));
 							debugDraw.SetDrawScale(20.0);
