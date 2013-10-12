@@ -50,7 +50,7 @@ function Server() {
         console.log("Number of servers: "+serverlist.length);
 
         ws.on('close', function() {
-            console.log("Client Disconnect");
+            console.log("Client Disconnected");
             if(!self.started) {
                 var index = self.players.indexOf(this);
                 if(index != -1) self.players.splice(index, 1);

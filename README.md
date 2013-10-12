@@ -1,5 +1,5 @@
 <h1>Pivot</h1>
-<h2>By Andrew Koroluk and Scott Little</h2>
+<b>By Andrew Koroluk and Scott Little</b>
 Pivot is a derpy game made for a Microsoft Hackathon. You control two legs held together by a joint.
  
 <h2>Important source files</h2>
