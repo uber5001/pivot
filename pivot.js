@@ -1,4 +1,10 @@
 /*
+ * Scott Little
+ * Andrew Koroluk
+ * 12 OCT 2013
+ */
+
+/*
 var b2Vec2 = Box2D.Common.Math.b2Vec2;
 var b2BodyDef = Box2D.Dynamics.b2BodyDef;
 var b2Body = Box2D.Dynamics.b2Body;
@@ -80,7 +86,7 @@ fixDef.density = 1.0;
 fixDef.friction = 0.8;
 fixDef.restitution = .2;
 
-	var legVerticies = [
+	var legVertices = [
 		new Box2D.Common.Math.b2Vec2(.2, 0),
 		new Box2D.Common.Math.b2Vec2(0, .2),
 		new Box2D.Common.Math.b2Vec2(-.2, 0),
@@ -105,7 +111,8 @@ fixDef.restitution = .2;
 			playerLegFixtureDef.friction = .8;
 			playerLegFixtureDef.restitution = .2;
 			playerLegFixtureDef.shape = new Box2D.Collision.Shapes.b2PolygonShape;
-			playerLegFixtureDef.shape.Set(legVerticies, 4);
+			playerLegFixtureDef.shape.SetAsArray(legVertices, 4);
+			//playerLegFixtureDef.shape.Set(legVertices, 4);
 
 		var playerLegBodyDef = new Box2D.Dynamics.b2BodyDef;
 			playerLegBodyDef.type = Box2D.Dynamics.b2Body.b2_dynamicBody;
