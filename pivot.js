@@ -85,7 +85,7 @@ world = new Box2D.Dynamics.b2World(
 		var playerLegFixtureDef = new Box2D.Dynamics.b2FixtureDef;
 			playerLegFixtureDef.density = 1;
 			playerLegFixtureDef.friction = .8;
-			playerLegFixtureDef.restitution = .2;
+			playerLegFixtureDef.restitution = .4;
 			playerLegFixtureDef.shape = new Box2D.Collision.Shapes.b2PolygonShape;
 			playerLegFixtureDef.shape.SetAsArray([
 				new Box2D.Common.Math.b2Vec2(.2, 0),
@@ -114,7 +114,7 @@ world = new Box2D.Dynamics.b2World(
 		jointDef.bodyA = foo;
 		jointDef.bodyB = bar;
 		jointDef.anchorPoint = foo.GetPosition();
-		jointDef.maxMotorTorque = 100;
+		jointDef.maxMotorTorque = 10;
 		jointDef.motorSpeed = 0;
 		jointDef.enableMotor = true;
 	var joo = world.CreateJoint(jointDef);
@@ -127,7 +127,7 @@ window.addEventListener('keydown', function(e) {
 	//TODO: add forwards compatible e.key or e.char
 	if (e.keyCode == 37) {
 		left = true;
-	} else if (e.keyCode = 39) {
+	} else if (e.keyCode == 39) {
 		right = true;
 	}
 	updateRotationSpeed();
@@ -135,7 +135,7 @@ window.addEventListener('keydown', function(e) {
 window.addEventListener('keyup', function(e) {
 	if (e.keyCode == 37) {
 		left = false;
-	} else if (e.keyCode = 39) {
+	} else if (e.keyCode == 39) {
 		right = false;
 	}
 	updateRotationSpeed();
@@ -148,8 +148,8 @@ function updateRotationSpeed() {
 //ground stuffs
 var fixDef = new Box2D.Dynamics.b2FixtureDef;
 fixDef.density = 1.0;
-fixDef.friction = 0.8;
-fixDef.restitution = .2;
+fixDef.friction = 0.5;
+fixDef.restitution = .1;
 fixDef.shape = new Box2D.Collision.Shapes.b2PolygonShape;
 fixDef.shape.SetAsBox(4, 1);
 
@@ -200,7 +200,7 @@ world.CreateBody(bodyDef).CreateFixture(fixDef);
 window.setInterval(update, 1000 / 60);
 function update() {
 	world.Step(
-			1 / 60   //frame-rate
+			1 / 120   //frame-rate
 		,  10       //velocity iterations
 		,  10       //position iterations
 	);
