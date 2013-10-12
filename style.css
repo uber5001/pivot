@@ -4,3 +4,18 @@ body {
 canvas {
 	display: block;
 }
+#broadcast {
+	position: absolute;
+	display: table;
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+	font-size: 3rem;
+	font-family: sans-serif;
+}
+#broadcast > div {
+	display: table-cell;
+	text-align: center;
+	vertical-align: middle;
+}

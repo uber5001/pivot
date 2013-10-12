@@ -18,21 +18,42 @@ var gameTest = new PivotGame(1/*player*/, canvas.getContext('2d'));
 function render() {
 	gameTest.render();
 	requestAnimationFrame(render);
-} render();
+}
 
-var gameTest = undefined;
-var ws = new WebSocket("ws://scottlittle.me:8080");
-ws.addEventListener('message', function(e) {
-	var msg = JSON.parse(e.data);
-	console.log(e.data);
-	if (msg.type == "tick") {
-		if (gameTest == undefined) {
-			console.log('foo');
-			gameTest = new PivotGame(msg.inputs.length, canvas.getContext('2d'));
+function broadcast(msg) {
+	document.getElementById('broadcast').firstChild.innerText = msg;
+}
+
+function newConnection() {
+	delete gameTest;
+	gameTest = undefined;
+	ws = new WebSocket("ws://scottlittle.me:8080");
+	broadcast("Connecting to server...");
+	ws.addEventListener('message', function(e) {
+		var msg = JSON.parse(e.data);
+		if (msg.type == "tick") {
+			if (gameTest == undefined) {
+				console.log('foo');
+				gameTest = new PivotGame(msg.inputs.length, canvas.getContext('2d'));
+				render();
+			}
+
+			gameTest.update(msg.inputs);
+		} else if (msg.type == "broadcast") {
+			broadcast(msg.message);
 		}
-		gameTest.update(msg.inputs);
-	}
-});
+	});
+	ws.addEventListener('open', function() {
+		broadcast("Connected!");
+	})
+	ws.addEventListener('error', function() {
+		broadcast("Something went wrong...");
+	});
+	ws.addEventListener('close', function() {
+		broadcast("Connection lost. Connecting to a new game...");
+		newConnection();
+	});
+} newConnection();
 
 
 //TODO: don't hard-code it to be local!
