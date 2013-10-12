@@ -55,12 +55,18 @@ function PivotGame(playerCount, debugContext) {
 
 	this.timeScale = TIMESCALE;
 
+	var pxcenter = 0;
+	var pycenter = 0;
+	var pwidth = 100;
+	var pheight = 100;
+
 	this.render = function(context) {
 		var xmax = -Infinity;
 		var xmin = Infinity;
 		var ymax = -Infinity;
 		var ymin = Infinity;
 		for (var i = 0; i < playerCount; i++) {
+			if (players[i].y > 50) continue;
 			xmax = Math.max(xmax, players[i].x);
 			xmin = Math.min(xmin, players[i].x);
 			ymax = Math.max(ymax, players[i].y);
@@ -71,6 +77,14 @@ function PivotGame(playerCount, debugContext) {
 
 		var xcenter = (xmin+xmax)/2;
 		var ycenter = (ymin+ymax)/2;
+
+		pwidth =   width =   width*.02 +   pwidth*.98;
+		pheight =  height =  height*.02 +  pheight*.98;
+		pxcenter = xcenter = xcenter*.02 + pxcenter*.98;
+		pycenter = ycenter = ycenter*.02 + pycenter*.98;
+
+
+
 
 		var aspect = width/height;
 		var windowAspect = innerWidth/innerHeight;
@@ -85,7 +99,8 @@ function PivotGame(playerCount, debugContext) {
 			width = height*windowAspect;
 			sizeRatio = innerHeight/height;
 		}
-		context.clearRect(0,0,innerWidth,innerHeight);
+		context.fillStyle = "#00ABA9";
+		context.fillRect(0,0,innerWidth,innerHeight);
 		context.save();
 		context.translate(innerWidth/2,innerHeight/2);
 		context.scale(sizeRatio, sizeRatio);
@@ -93,9 +108,9 @@ function PivotGame(playerCount, debugContext) {
 
 		//draw with xcenter, ycenter, width, and height
 		//subtract our center to move it to 0,0
+		context.fillStyle = "white";
 		for (var i = 0; i < playerCount; i++) {
 			context.beginPath();
-			context.fillStyle = "blue";
 			context.arc(players[i].x,players[i].y,HINGE_SIZE,0,2*Math.PI);
 			context.fill();
 
@@ -103,16 +118,22 @@ function PivotGame(playerCount, debugContext) {
 			context.lineWidth = HINGE_SIZE;
 			var rot = players[i].shortLeg.GetAngle();
 			var len = SHORT_LEG_LENGTH
+			var rotOff = Math.acos(HINGE_SIZE/len);
 			context.beginPath();
 			context.moveTo(players[i].x,players[i].y);
+			context.lineTo(players[i].x-HINGE_SIZE*Math.sin(rot+rotOff),players[i].y+HINGE_SIZE*Math.cos(rot+rotOff));
 			context.lineTo(players[i].x-len*Math.sin(rot),players[i].y+len*Math.cos(rot));
-			context.stroke();
+			context.lineTo(players[i].x-HINGE_SIZE*Math.sin(rot-rotOff),players[i].y+HINGE_SIZE*Math.cos(rot-rotOff));
+			context.fill();
 
 			rot = players[i].longLeg.GetAngle();
 			len = LONG_LEG_LENGTH
+			var rotOff = Math.acos(HINGE_SIZE/len);
 			context.moveTo(players[i].x,players[i].y);
+			context.lineTo(players[i].x-HINGE_SIZE*Math.sin(rot+rotOff),players[i].y+HINGE_SIZE*Math.cos(rot+rotOff));
 			context.lineTo(players[i].x-len*Math.sin(rot),players[i].y+len*Math.cos(rot));
-			context.stroke();
+			context.lineTo(players[i].x-HINGE_SIZE*Math.sin(rot-rotOff),players[i].y+HINGE_SIZE*Math.cos(rot-rotOff));
+			context.fill();
 		}
 
 		for (var i = 0; i < platforms.length; i++) {
