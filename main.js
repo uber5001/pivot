@@ -4,6 +4,19 @@
  * 12 OCT 2013
  */
 
+
+
+
+//load map
+var map = {};
+
+var mapRequest = new XMLHttpRequest();
+mapRequest.open("GET","map.json");
+mapRequest.addEventListener("success", function(data) {
+	map = JSON.parse(data);
+});
+mapRequest.send();
+
 //canvas maintainence
 var canvas = document.getElementById('canvas');
 window.addEventListener('resize', resize);
@@ -11,9 +24,6 @@ function resize() {
 	canvas.width = innerWidth;
 	canvas.height = innerHeight;
 } resize();
-
-//run the game
-var gameTest = new PivotGame(1/*player*/);
 
 function render() {
 	gameTest.render(canvas.getContext('2d'));
@@ -33,7 +43,7 @@ function newConnection() {
 		var msg = JSON.parse(e.data);
 		if (msg.type == "tick") {
 			if (gameTest == undefined) {
-				gameTest = new PivotGame(msg.inputs.length);
+				gameTest = new PivotGame(msg.inputs.length, map);
 				render();
 			}
 

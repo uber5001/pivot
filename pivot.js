@@ -19,7 +19,7 @@ var GRAVITY = 10;
 
 var TIMESCALE = 1;
 
-function PivotGame(playerCount, debugContext) {
+function PivotGame(playerCount, map) {
 
 	var world = new Box2D.Dynamics.b2World(
 		new Box2D.Common.Math.b2Vec2(0, GRAVITY), //grav
@@ -28,9 +28,30 @@ function PivotGame(playerCount, debugContext) {
 
 	var players = [];
 	for (var i = 0; i < playerCount; i++) {
-		players[i] = new Player(world, 10+i, 5);
+		players[i] = new Player(world, map.spawns[i].x, map.spawns[i].y);
 	}
-	var platforms = []
+
+	var platforms = [];
+	for (var i = 0; i < map.platforms.length; i++) {
+		var tmpShape = new Box2D.Collision.Shapes.b2PolygonShape;
+		var verts = [];
+		var x = 0;
+		var y = 0;
+		for (var j = 0; j < map.platforms[i].length; j++) {
+			verts.push(new Box2D.Common.Math.b2Vec2(map.platforms[i][j].x, map.platforms[i][j].y));
+			x += verts[j].x;
+			y += verts[j].y;
+		}
+		x /= map.platforms[i].length;
+		y /= map.platforms[i].length;
+		for (var j = 0; j < verts.length; j++) {
+			verts[j].x-=x;
+			verts[j].y-=y;
+		}
+		tmpShape.SetAsArray(verts, verts.length);
+		platforms[i] = new Platform(world, x, y, tmpShape)
+	}
+	/*
 	var tmp = new Box2D.Collision.Shapes.b2PolygonShape;
 		tmp.SetAsBox(4, 1);
 	platforms[0] = new Platform(world, 10, 10, tmp);
@@ -38,16 +59,7 @@ function PivotGame(playerCount, debugContext) {
 	var tmp2 = new Box2D.Collision.Shapes.b2PolygonShape;
 		tmp2.SetAsBox(5, 1);
 	platforms[2] = new Platform(world, 0, 20, tmp2);
-
-	if (debugContext != undefined) {
-		var debugDraw = new Box2D.Dynamics.b2DebugDraw;
-		debugDraw.SetSprite(debugContext);
-		debugDraw.SetDrawScale(1.0);
-		debugDraw.SetFillAlpha(0.1);
-		debugDraw.SetLineThickness(1.0);
-		debugDraw.SetFlags(Box2D.Dynamics.b2DebugDraw.e_shapeBit | Box2D.Dynamics.b2DebugDraw.e_jointBit);
-		world.SetDebugDraw(debugDraw);
-	}
+	*/
 
 	function updateRotationSpeed() {
 		joo.SetMotorSpeed( (left ? -PLAYER_JOINT_SPEED : 0) + (right ? PLAYER_JOINT_SPEED : 0) );
@@ -61,10 +73,10 @@ function PivotGame(playerCount, debugContext) {
 	var pheight = 100;
 
 	this.render = function(context) {
-		var xmax = -Infinity;
-		var xmin = Infinity;
-		var ymax = -Infinity;
-		var ymin = Infinity;
+		var xmax = 0;
+		var xmin = 0;
+		var ymax = 0;
+		var ymin = 0;
 		for (var i = 0; i < playerCount; i++) {
 			if (players[i].y > 50) continue;
 			xmax = Math.max(xmax, players[i].x);
