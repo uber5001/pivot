@@ -111,8 +111,8 @@ function PivotGame(playerCount, map) {
 			width = height*windowAspect;
 			sizeRatio = innerHeight/height;
 		}
-		context.fillStyle = "#00ABA9";
-		context.fillRect(0,0,innerWidth,innerHeight);
+		//context.fillStyle = "#00ABA9";
+		context.clearRect(0,0,innerWidth,innerHeight);
 		context.save();
 		context.translate(innerWidth/2,innerHeight/2);
 		context.scale(sizeRatio, sizeRatio);
@@ -172,5 +172,16 @@ function PivotGame(playerCount, map) {
 		);
 		world.DrawDebugData();
 		world.ClearForces();
+
+		var pplInBounds = 0;
+		for (var i = 0; i < playerCount; i++) {
+			if(players[i].y > map.bounds.top &&
+				players[i].y < map.bounds.bottom &&
+				players[i].x > map.bounds.left &&
+				players[i].x < map.bounds.right) pplInBounds++;
+		}
+		if(pplInBounds < 2)
+			return false;
+		return true;
 	};
 }

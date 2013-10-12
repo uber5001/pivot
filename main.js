@@ -5,15 +5,16 @@
  */
 
 
-
+document.getElementById("play").addEventListener("click", newConnection);
 
 //load map
 var map = {};
 
 var mapRequest = new XMLHttpRequest();
-mapRequest.open("GET","map.json");
-mapRequest.addEventListener("success", function(data) {
-	map = JSON.parse(data);
+mapRequest.open("GET","map1.json");
+mapRequest.addEventListener("load", function(data) {
+	console.log(mapRequest.response);
+	map = JSON.parse(mapRequest.response);
 });
 mapRequest.send();
 
@@ -26,16 +27,23 @@ function resize() {
 } resize();
 
 function render() {
+	try {
 	gameTest.render(canvas.getContext('2d'));
-	requestAnimationFrame(render);
+		requestAnimationFrame(render);
+	} catch(e) {}
 }
 
-function broadcast(msg) {
+function broadcast(msg, shadow) {
 	document.getElementById('broadcast').firstChild.innerText = msg;
+	if(shadow) 
+		document.getElementById('broadcast').style["text-shadow"]="0 1px 3px black";
+	else 
+		document.getElementById('broadcast').style["text-shadow"]="none";
 }
 
 function newConnection() {
-	delete gameTest;
+	document.getElementById("play").style.display="none";
+
 	gameTest = undefined;
 	ws = new WebSocket("ws://scottlittle.me:8080");
 	broadcast("Connecting to server...");
@@ -47,7 +55,10 @@ function newConnection() {
 				render();
 			}
 
-			gameTest.update(msg.inputs);
+			if(!gameTest.update(msg.inputs)) {
+				broadcast("Game Over", true);
+				setTimeout(function() {ws.close();}, 5000);
+			}
 		} else if (msg.type == "broadcast") {
 			broadcast(msg.message);
 		}
@@ -59,10 +70,14 @@ function newConnection() {
 		broadcast("Something went wrong...");
 	});
 	ws.addEventListener('close', function() {
-		broadcast("Connection lost. Connecting to a new game...");
-		newConnection();
+		//broadcast("Connection lost. Connecting to a new game...");
+		delete gameTest;
+		broadcast("");
+		document.getElementById("play").style.display="block";
+		canvas.getContext("2d").clearRect(0,0,innerWidth,innerHeight);
+		//newConnection();
 	});
-} newConnection();
+}
 
 
 //TODO: don't hard-code it to be local!

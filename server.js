@@ -83,7 +83,7 @@ function Server() {
                         clearInterval(interval);
                         return;
                     }
-                    var msg = JSON.stringify({"message":"BEGIN!", "type":"broadcast"});
+                    var msg = JSON.stringify({"message":"", "type":"broadcast"});
                     for(var i=0; i<self.players.length; i++) {
                         self.players[i].send(msg);
                     }
