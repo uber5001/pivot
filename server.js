@@ -3,8 +3,8 @@
  * Scott Little
  */
 
-var PREGAME_TIMER = 5000;
-var MAX_GAME_TIMER = 300000;
+var PREGAME_TIMER = 5*1000;
+var MAX_GAME_TIMER = 5*60*1000;
 
 var WebSocketServer = require('ws').Server
   , wss = new WebSocketServer({port: 8080});
@@ -13,7 +13,7 @@ var serverlist = [];
   
 wss.on('connection', function(ws) {
 
-    console.log("Incoming Connection");
+    console.log("Client Connected");
     
     var hasJoined = false;
     this.name = "Scott";
@@ -34,7 +34,7 @@ wss.on('connection', function(ws) {
         //interpret message
         
         
-        console.log('received: %s', message);
+        //console.log('received: %s', message);
     });
     
 });
@@ -46,16 +46,43 @@ function Server() {
     
     this.join = function(ws) {
         this.players.push(ws);
+
+        console.log("Number of servers: "+serverlist.length);
+
+        ws.on('close', function() {
+            console.log("Client Disconnect");
+            if(!self.started) {
+                var index = self.players.indexOf(this);
+                if(index != -1) self.players.splice(index, 1);
+                else Console.log("wat");
+                if(self.players.length < 2) 
+                    clearInterval(interval);
+                if(self.players.length == 0) self.stop();
+            }
+            else {
+                this.DC=true;
+                for(var i=0; i<self.players.length; i++) {
+                    if(!self.players[i].DC) return;
+                }
+                self.stop();
+            }
+        })
         
+        var interval = 0;
         if(this.players.length == 2) {
             /*setTimeout(function() {
                 self.start();
             }
             , PREGAME_TIMER);*/
             var time = PREGAME_TIMER+1000;
-            var interval = setInterval(function() {
+            interval = setInterval(function() {
                 time -= 1000;
                 if(time == 0) {
+                    if(self.players.length < 2) {
+                        //self.stop();
+                        clearInterval(interval);
+                        return;
+                    }
                     var msg = JSON.stringify({"message":"BEGIN!", "type":"broadcast"});
                     for(var i=0; i<self.players.length; i++) {
                         self.players[i].send(msg);
@@ -73,7 +100,9 @@ function Server() {
                 else {
                     var msg = JSON.stringify({"message":time/1000, "type":"broadcast"});
                     for(var i=0; i<self.players.length; i++) {
-                        self.players[i].send(msg);
+                        try {
+                            self.players[i].send(msg);
+                        } catch(e) {}
                     }
                 }
             }
@@ -89,13 +118,12 @@ function Server() {
         if(this.started) return;
 
         var startingPlayers = this.players.length;
+        var currentPlayers = this.players.length;
         var stopMsgs = 0;
         var stopped = false;
         this.started = true;
-        setTimeout(function() {
-                self.stop();
-            }
-        , MAX_GAME_TIMER); //Auto stop in 5 minutes
+        setTimeout(function() {self.stop();}, 
+                    MAX_GAME_TIMER); //Auto stop in 5 minutes
         
         var inputs = [];
         
@@ -130,7 +158,9 @@ function Server() {
         var interval = setInterval(function() {
             var msg = JSON.stringify({"inputs":inputs, "type":"tick"});
             for(var i=0; i<self.players.length; i++) {
-                self.players[i].send(msg);
+                try {
+                    self.players[i].send(msg);
+                } catch(e) {}
             }
         }
         , 1000/60);
@@ -140,6 +170,8 @@ function Server() {
         var index = serverlist.indexOf(this);
         if(index != -1) serverlist.splice(index, 1);
         else console.log("Server to be removed not found, wat");
+        console.log("Server Stopped.");
+        console.log("Number of servers: "+serverlist.length);
     }
 }
 
