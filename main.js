@@ -13,10 +13,10 @@ function resize() {
 } resize();
 
 //run the game
-var gameTest = new PivotGame(1/*player*/, canvas.getContext('2d'));
+var gameTest = new PivotGame(1/*player*/);
 
 function render() {
-	gameTest.render();
+	gameTest.render(canvas.getContext('2d'));
 	requestAnimationFrame(render);
 }
 
@@ -33,8 +33,7 @@ function newConnection() {
 		var msg = JSON.parse(e.data);
 		if (msg.type == "tick") {
 			if (gameTest == undefined) {
-				console.log('foo');
-				gameTest = new PivotGame(msg.inputs.length, canvas.getContext('2d'));
+				gameTest = new PivotGame(msg.inputs.length);
 				render();
 			}
 

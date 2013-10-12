@@ -44,4 +44,15 @@ function Player(world, x, y) {
 		jointDef.enableMotor = true;
 
 	this.joint = world.CreateJoint(jointDef);
+
+	Object.defineProperty(this, 'x', {
+		get: function() {
+			return this.shortLeg.GetPosition().x;
+		}
+	});
+	Object.defineProperty(this, 'y', {
+		get: function() {
+			return this.shortLeg.GetPosition().y;
+		}
+	});
 }

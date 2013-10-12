@@ -11,8 +11,9 @@ canvas {
 	height: 100%;
 	top: 0;
 	left: 0;
-	font-size: 3rem;
-	font-family: sans-serif;
+	font-size: 4rem;
+	font-family: "Segoe UI Light", sans-serif;
+	pointer-events: none;
 }
 #broadcast > div {
 	display: table-cell;
