@@ -81,54 +81,82 @@ world = new Box2D.Dynamics.b2World(
 	true //allow sleep
 );
 
-var fixDef = new Box2D.Dynamics.b2FixtureDef;
-fixDef.density = 1.0;
-fixDef.friction = 0.8;
-fixDef.restitution = .2;
-
-	var legVertices = [
-		new Box2D.Common.Math.b2Vec2(.2, 0),
-		new Box2D.Common.Math.b2Vec2(0, .2),
-		new Box2D.Common.Math.b2Vec2(-.2, 0),
-		new Box2D.Common.Math.b2Vec2(0, -2)
-	];
-
-		var playerHingeBodyDef = new Box2D.Dynamics.b2BodyDef;
-			playerHingeBodyDef.type = Box2D.Dynamics.b2Body.b2_dynamicBody;
-			playerHingeBodyDef.position.x = 10;
-			playerHingeBodyDef.position.y = 5;
-
-		var playerHingeFixtureDef = new Box2D.Dynamics.b2FixtureDef;
-			playerHingeFixtureDef.density = 1;
-			playerHingeFixtureDef.friction = .8;
-			playerHingeFixtureDef.restitution = .2;
-			playerHingeFixtureDef.shape = new Box2D.Collision.Shapes.b2CircleShape(.2);
-
-
 
 		var playerLegFixtureDef = new Box2D.Dynamics.b2FixtureDef;
 			playerLegFixtureDef.density = 1;
 			playerLegFixtureDef.friction = .8;
 			playerLegFixtureDef.restitution = .2;
 			playerLegFixtureDef.shape = new Box2D.Collision.Shapes.b2PolygonShape;
-			playerLegFixtureDef.shape.SetAsArray(legVertices, 4);
-			//playerLegFixtureDef.shape.Set(legVertices, 4);
+			playerLegFixtureDef.shape.SetAsArray([
+				new Box2D.Common.Math.b2Vec2(.2, 0),
+				new Box2D.Common.Math.b2Vec2(0, .2),
+				new Box2D.Common.Math.b2Vec2(-.2, 0),
+				new Box2D.Common.Math.b2Vec2(0, -2)
+			], 4);
 
 		var playerLegBodyDef = new Box2D.Dynamics.b2BodyDef;
 			playerLegBodyDef.type = Box2D.Dynamics.b2Body.b2_dynamicBody;
 			playerLegBodyDef.position.x = 10;
 			playerLegBodyDef.position.y = 5;
 
-	world.CreateBody(playerHingeBodyDef).CreateFixture(playerHingeFixtureDef);
-	world.CreateBody(playerLegBodyDef).CreateFixture(playerLegFixtureDef);
+	var foo = world.CreateBody(playerLegBodyDef)
+	foo.CreateFixture(playerLegFixtureDef);
+	playerLegFixtureDef.shape.SetAsArray([
+				new Box2D.Common.Math.b2Vec2(.2, 0),
+				new Box2D.Common.Math.b2Vec2(0, .2),
+				new Box2D.Common.Math.b2Vec2(-.2, 0),
+				new Box2D.Common.Math.b2Vec2(0, -2.5)
+			], 4);
+	var bar = world.CreateBody(playerLegBodyDef)
+	bar.CreateFixture(playerLegFixtureDef);
+
+	var jointDef = new Box2D.Dynamics.Joints.b2RevoluteJointDef;
+		jointDef.bodyA = foo;
+		jointDef.bodyB = bar;
+		jointDef.anchorPoint = foo.GetPosition();
+		jointDef.maxMotorTorque = 100;
+		jointDef.motorSpeed = 0;
+		jointDef.enableMotor = true;
+	var joo = world.CreateJoint(jointDef);
+
+
+//hacky event handlers
+var left = false;
+var right = false;
+window.addEventListener('keydown', function(e) {
+	//TODO: add forwards compatible e.key or e.char
+	if (e.keyCode == 37) {
+		left = true;
+	} else if (e.keyCode = 39) {
+		right = true;
+	}
+	updateRotationSpeed();
+});
+window.addEventListener('keyup', function(e) {
+	if (e.keyCode == 37) {
+		left = false;
+	} else if (e.keyCode = 39) {
+		right = false;
+	}
+	updateRotationSpeed();
+});
+function updateRotationSpeed() {
+	joo.SetMotorSpeed( (left ? -10 : 0) + (right ? 10 : 0) )
+}
+
+
+//ground stuffs
+var fixDef = new Box2D.Dynamics.b2FixtureDef;
+fixDef.density = 1.0;
+fixDef.friction = 0.8;
+fixDef.restitution = .2;
+fixDef.shape = new Box2D.Collision.Shapes.b2PolygonShape;
+fixDef.shape.SetAsBox(4, 1);
 
 var bodyDef = new Box2D.Dynamics.b2BodyDef;
-
 bodyDef.type = Box2D.Dynamics.b2Body.b2_staticBody;
 bodyDef.position.x = 10;
 bodyDef.position.y = 10;
-fixDef.shape = new Box2D.Collision.Shapes.b2PolygonShape;
-fixDef.shape.SetAsBox(4, 1);
 world.CreateBody(bodyDef).CreateFixture(fixDef);
 /*
 
