@@ -64,7 +64,7 @@ function newConnection() {
 		}
 	});
 	ws.addEventListener('open', function() {
-		broadcast("Connected!");
+		broadcast("Connected, waiting for another player to join...");
 	})
 	ws.addEventListener('error', function() {
 		broadcast("Something went wrong...");
