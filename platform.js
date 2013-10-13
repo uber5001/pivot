@@ -15,6 +15,7 @@ function Platform(world, x, y, shape) {
 		var myBody = world.CreateBody(bodyDef)
 		myBody.CreateFixture(fixDef);
 
+	this.body = myBody
 
 		Object.defineProperty(this, 'x', {
 			get: function() {

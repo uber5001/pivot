@@ -45,3 +45,6 @@ canvas {
 #play:active {
 	transform: scale(.98);
 }
+#play:focus {
+	outline: 0;
+}

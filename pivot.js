@@ -25,6 +25,24 @@ function PivotGame(playerCount, map) {
 		new Box2D.Common.Math.b2Vec2(0, GRAVITY), //grav
 		true //allow sleep
 	);
+	
+	var playerFinished = false;
+	
+	world.SetContactListener(new (function(){
+		
+		this.BeginContact = function() {
+			try {
+			if (arguments[0].m_fixtureA.GetBody() == platforms[0].body ||
+				arguments[0].m_fixtureB.GetBody() == platforms[0].body ) {
+					console.log('gg');
+					playerFinished = true;
+				}
+			} catch (e) {}
+		};
+		this.EndContact = function() {};
+		this.PreSolve = function() {};	
+		this.PostSolve = function() {};	
+	}));
 
 	var players = [];
 	for (var i = 0; i < playerCount; i++) {
@@ -182,6 +200,6 @@ function PivotGame(playerCount, map) {
 		}
 		if(pplInBounds < 2)
 			return false;
-		return true;
+		return !playerFinished;
 	};
 }

@@ -3,8 +3,9 @@
  * Scott Little
  */
 
-var PREGAME_TIMER = 5*1000;
+var PREGAME_TIMER = 60*1000;
 var MAX_GAME_TIMER = 5*60*1000;
+var MAXPLAYERS = 20;
 
 var WebSocketServer = require('ws').Server
   , wss = new WebSocketServer({port: 8080});
@@ -109,7 +110,7 @@ function Server() {
             , 1000);
         }
         
-        else if(this.players.length == 10) { //or 30 sec after first player join
+        else if(this.players.length == MAXPLAYERS) { //or 30 sec after first player join
             this.start();
         }
     }

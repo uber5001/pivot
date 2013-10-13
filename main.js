@@ -13,7 +13,7 @@ var map = {};
 var mapRequest = new XMLHttpRequest();
 mapRequest.open("GET","map1.json");
 mapRequest.addEventListener("load", function(data) {
-	console.log(mapRequest.response);
+	// console.log(mapRequest.response);
 	map = JSON.parse(mapRequest.response);
 });
 mapRequest.send();
