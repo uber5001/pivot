@@ -43,6 +43,7 @@ function broadcast(msg, shadow) {
 
 function newConnection() {
 	document.getElementById("play").style.display="none";
+	document.getElementById("hometext").style.display="none";
 
 	gameTest = undefined;
 	ws = new WebSocket("ws://scottlittle.me:8080");
@@ -50,7 +51,7 @@ function newConnection() {
 	ws.addEventListener('message', function(e) {
 		var msg = JSON.parse(e.data);
 		if (msg.type == "tick") {
-			if (gameTest == undefined) {
+			if (gameTest === undefined) {
 				gameTest = new PivotGame(msg.inputs.length, map);
 				render();
 			}
@@ -65,7 +66,7 @@ function newConnection() {
 	});
 	ws.addEventListener('open', function() {
 		broadcast("Connected, waiting for another player to join...");
-	})
+	});
 	ws.addEventListener('error', function() {
 		broadcast("Something went wrong...");
 	});
@@ -74,6 +75,7 @@ function newConnection() {
 		delete gameTest;
 		broadcast("");
 		document.getElementById("play").style.display="block";
+		document.getElementById("hometext").style.display="block";
 		canvas.getContext("2d").clearRect(0,0,innerWidth,innerHeight);
 		//newConnection();
 	});

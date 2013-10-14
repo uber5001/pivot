@@ -1,0 +1,62 @@
+body {
+	background-color: #00aba9;
+	color: white;
+	margin: 0;
+	font-family: "Segoe UI Light", sans-serif;
+}
+canvas {
+	display: block;
+}
+#broadcast {
+	position: absolute;
+	display: table;
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+	font-size: 4rem;
+	pointer-events: none;
+}
+#broadcast > div {
+	display: table-cell;
+	text-align: center;
+	vertical-align: middle;
+}
+#play {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	width: 35rem;
+	height: 15rem;
+	margin: auto;
+	background-color: white;
+	border-radius: 4rem;
+	border: 0;
+	color: #00aba9;
+	font-size: 10rem;
+	z-index: 10;
+	padding: 0 0 1rem 0;
+	font-family: inherit;
+	line-height: .8;
+	transition: transform .1s;
+}
+#play:active {
+	transform: scale(.98);
+}
+#play:focus {
+	outline: 0;
+}
+#hometext {
+	position: absolute;
+	/*top: 0;*/
+	bottom: 5rem;
+	left: 0;
+	right: 0;
+	margin: auto;
+	font-size: 2rem;
+}
+img {
+	vertical-align: middle;
+}

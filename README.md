@@ -3,11 +3,11 @@
 Pivot is a derpy game made for a Microsoft Hackathon. You control two legs held together by a joint.
  
 <h2>Important source files</h2>
-main.js - Main js container<br />
-pivot.js - <br />
-platform.js - <br />
-player.js - <br />
-server.js - <br />
+main.js - Main client js container<br />
+pivot.js - Rendering, etc.<br />
+platform.js - Platform objects<br />
+player.js - Definitions for Player object<br />
+server.js - Server, clients never get to see this<br />
 index.html - Basic HTML5 Canvas page for showing our pretty JS<br />
 style.css - You should know what this is<br />
 <br />

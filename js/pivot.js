@@ -4,37 +4,37 @@
  * 12 OCT 2013
  */
 
-var SHORT_LEG_LENGTH = 2;
+var SHORT_LEG_LENGTH = 1.5;
 var LONG_LEG_LENGTH = 2.5;
-var HINGE_SIZE = .2
+var HINGE_SIZE = 0.2;
 
-var PLAYER_RESTITUTION = .4;
+var PLAYER_RESTITUTION = 0.3;
 var PLAYER_DENSITY = 1;
-var PLAYER_FRICTION = .8;
+var PLAYER_FRICTION = 0.8;
 
-var PLAYER_JOINT_TORQUE = 10;
+var PLAYER_JOINT_TORQUE = 30;
 var PLAYER_JOINT_SPEED = 10;
 
-var GRAVITY = 10;
+var GRAVITY = 9;
 
 var TIMESCALE = 1;
 
 function PivotGame(playerCount, map) {
 
 	var world = new Box2D.Dynamics.b2World(
-		new Box2D.Common.Math.b2Vec2(0, GRAVITY), //grav
+		new Box2D.Common.Math.b2Vec2(0, GRAVITY), //gravity
 		true //allow sleep
 	);
 	
 	var playerFinished = false;
 	
-	world.SetContactListener(new (function(){
+	world.SetContactListener(new (function() {
 		
 		this.BeginContact = function() {
 			try {
-			if (arguments[0].m_fixtureA.GetBody() == platforms[0].body ||
-				arguments[0].m_fixtureB.GetBody() == platforms[0].body ) {
-					console.log('gg');
+				if (arguments[0].m_fixtureA.GetBody() == platforms[0].body ||
+					arguments[0].m_fixtureB.GetBody() == platforms[0].body ) {
+					//console.log('gg');
 					playerFinished = true;
 				}
 			} catch (e) {}
@@ -50,8 +50,8 @@ function PivotGame(playerCount, map) {
 	}
 
 	var platforms = [];
-	for (var i = 0; i < map.platforms.length; i++) {
-		var tmpShape = new Box2D.Collision.Shapes.b2PolygonShape;
+	for (i = 0; i < map.platforms.length; i++) {
+		var tmpShape = new Box2D.Collision.Shapes.b2PolygonShape();
 		var verts = [];
 		var x = 0;
 		var y = 0;
@@ -62,12 +62,12 @@ function PivotGame(playerCount, map) {
 		}
 		x /= map.platforms[i].length;
 		y /= map.platforms[i].length;
-		for (var j = 0; j < verts.length; j++) {
+		for (j = 0; j < verts.length; j++) {
 			verts[j].x-=x;
 			verts[j].y-=y;
 		}
 		tmpShape.SetAsArray(verts, verts.length);
-		platforms[i] = new Platform(world, x, y, tmpShape)
+		platforms[i] = new Platform(world, x, y, tmpShape);
 	}
 	/*
 	var tmp = new Box2D.Collision.Shapes.b2PolygonShape;
@@ -108,10 +108,10 @@ function PivotGame(playerCount, map) {
 		var xcenter = (xmin+xmax)/2;
 		var ycenter = (ymin+ymax)/2;
 
-		pwidth =   width =   width*.02 +   pwidth*.98;
-		pheight =  height =  height*.02 +  pheight*.98;
-		pxcenter = xcenter = xcenter*.02 + pxcenter*.98;
-		pycenter = ycenter = ycenter*.02 + pycenter*.98;
+		pwidth =   width =   width*0.02 +   pwidth*0.98;
+		pheight =  height =  height*0.02 +  pheight*0.98;
+		pxcenter = xcenter = xcenter*0.02 + pxcenter*0.98;
+		pycenter = ycenter = ycenter*0.02 + pycenter*0.98;
 
 
 
@@ -139,7 +139,7 @@ function PivotGame(playerCount, map) {
 		//draw with xcenter, ycenter, width, and height
 		//subtract our center to move it to 0,0
 		context.fillStyle = "white";
-		for (var i = 0; i < playerCount; i++) {
+		for (i = 0; i < playerCount; i++) {
 			context.beginPath();
 			context.arc(players[i].x,players[i].y,HINGE_SIZE,0,2*Math.PI);
 			context.fill();
@@ -147,7 +147,7 @@ function PivotGame(playerCount, map) {
 
 			context.lineWidth = HINGE_SIZE;
 			var rot = players[i].shortLeg.GetAngle();
-			var len = SHORT_LEG_LENGTH
+			var len = SHORT_LEG_LENGTH;
 			var rotOff = Math.acos(HINGE_SIZE/len);
 			context.beginPath();
 			context.moveTo(players[i].x,players[i].y);
@@ -157,8 +157,8 @@ function PivotGame(playerCount, map) {
 			context.fill();
 
 			rot = players[i].longLeg.GetAngle();
-			len = LONG_LEG_LENGTH
-			var rotOff = Math.acos(HINGE_SIZE/len);
+			len = LONG_LEG_LENGTH;
+			rotOff = Math.acos(HINGE_SIZE/len);
 			context.moveTo(players[i].x,players[i].y);
 			context.lineTo(players[i].x-HINGE_SIZE*Math.sin(rot+rotOff),players[i].y+HINGE_SIZE*Math.cos(rot+rotOff));
 			context.lineTo(players[i].x-len*Math.sin(rot),players[i].y+len*Math.cos(rot));
@@ -166,7 +166,7 @@ function PivotGame(playerCount, map) {
 			context.fill();
 		}
 
-		for (var i = 0; i < platforms.length; i++) {
+		for (i = 0; i < platforms.length; i++) {
 			var verts = platforms[i].shape.GetVertices();
 			context.beginPath();
 			context.moveTo(platforms[i].x+verts[verts.length-1].x, platforms[i].y+verts[verts.length-1].y);
@@ -176,7 +176,7 @@ function PivotGame(playerCount, map) {
 			context.fill();
 		}
 		context.restore();
-	}
+	};
 
 	this.update = function(inputs) {
 		for (var i = 0; i < playerCount; i++) {
@@ -184,15 +184,15 @@ function PivotGame(playerCount, map) {
 		}
 
 		world.Step(
-				1 / 60 * this.timeScale   //frame-rate
-			,  10       //velocity iterations
-			,  10       //position iterations
+				1 / 60 * this.timeScale,   //frame-rate
+					10,       //velocity iterations
+          10        //position iterations
 		);
 		world.DrawDebugData();
 		world.ClearForces();
 
 		var pplInBounds = 0;
-		for (var i = 0; i < playerCount; i++) {
+		for (i = 0; i < playerCount; i++) {
 			if(players[i].y > map.bounds.top &&
 				players[i].y < map.bounds.bottom &&
 				players[i].x > map.bounds.left &&
