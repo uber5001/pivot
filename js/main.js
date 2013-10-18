@@ -35,6 +35,7 @@ function render() {
 
 function broadcast(msg, shadow) {
 	document.getElementById('broadcast').firstChild.innerText = msg;
+	document.getElementById('broadcast').firstChild.textContent = msg;
 	if(shadow)
 		document.getElementById('broadcast').style["text-shadow"]="0 1px 3px black";
 	else
