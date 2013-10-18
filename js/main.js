@@ -22,8 +22,8 @@ mapRequest.send();
 var canvas = document.getElementById('canvas');
 window.addEventListener('resize', resize);
 function resize() {
-	canvas.width = innerWidth;
 	canvas.height = innerHeight;
+	canvas.width = innerWidth;
 } resize();
 
 function render() {
@@ -42,6 +42,10 @@ function broadcast(msg, shadow) {
 }
 
 function newConnection() {
+	//fullscreen
+	if (document.body.webkitRequestFullscreen) document.body.webkitRequestFullscreen();
+	else if (document.body.requestFullscreen) document.body.requestFullscreen();
+
 	document.getElementById("play").style.display="none";
 	document.getElementById("hometext").style.display="none";
 
@@ -103,21 +107,28 @@ window.addEventListener('keyup', function(e) {
 		updateControls();
 	}
 });
-window.addEventListener('touchdown', handleTouch);
-window.addEventListener('touchup', handleTouch);
+window.addEventListener('touchstart', handleTouch);
+window.addEventListener('touchmove', handleTouch);
+window.addEventListener('touchend', handleTouch);
 function handleTouch(e) {
-	if (e.touches.length == 1) {
-		if (e.touches[0].clientX < window.innerWidth) {
-			left = true;
-			right = false;
+	if (ws.readyState == 1) {
+		e.preventDefault();
+		if (e.touches.length == 1) {
+			if (e.touches[0].clientX < window.innerWidth/2) {
+				left = true;
+				right = false;
+				updateControls();
+			} else {
+				left = false;
+				right = true;
+				updateControls();
+			}
 		} else {
 			left = false;
-			right = true;
+			right = false;
+			updateControls();
 		}
-	} else {
-		left = false;
-		right = false;
-		updateControls();
+		return false;
 	}
 }
 function updateControls() {

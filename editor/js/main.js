@@ -1,8 +1,8 @@
 window.addEventListener('load',function(){
 	window.addEventListener('resize',resize);
 	function resize() {
-		canvas.height = innerHeight;
-		canvas.width = innerWidth;
+		canvas.height = innerHeight*devicePixelRatio;
+		canvas.width = innerWidth*devicePixelRatio;
 		render();
 	}
 	var canvas = document.getElementById('canvas');
