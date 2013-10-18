@@ -35,9 +35,9 @@ function render() {
 
 function broadcast(msg, shadow) {
 	document.getElementById('broadcast').firstChild.innerText = msg;
-	if(shadow) 
+	if(shadow)
 		document.getElementById('broadcast').style["text-shadow"]="0 1px 3px black";
-	else 
+	else
 		document.getElementById('broadcast').style["text-shadow"]="none";
 }
 
@@ -103,6 +103,23 @@ window.addEventListener('keyup', function(e) {
 		updateControls();
 	}
 });
+window.addEventListener('touchdown', handleTouch);
+window.addEventListener('touchup', handleTouch);
+function handleTouch(e) {
+	if (e.touches.length == 1) {
+		if (e.touches[0].clientX < window.innerWidth) {
+			left = true;
+			right = false;
+		} else {
+			left = false;
+			right = true;
+		}
+	} else {
+		left = false;
+		right = false;
+		updateControls();
+	}
+}
 function updateControls() {
 	var input = 0;
 	if (left) input++;
