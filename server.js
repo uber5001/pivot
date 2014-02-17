@@ -15,8 +15,8 @@ var serverlist = [];
 
 wss.on('connection', function(ws) {
 
-	console.log("Client Connected");
-	
+	console.log("Client Connected from "+ws._socket.remoteAddress);
+
 	var hasJoined = false;
 	this.name = "Scott";
 	
@@ -43,7 +43,7 @@ function Server() {
 	this.players = [];
 	this.started = false;
 	this.name = Math.floor(100000*Math.random());
-	this.timed_out = false;
+	//this.timed_out = false;
 
 	this.join = function(ws) {
 		this.players.push(ws);
@@ -51,7 +51,7 @@ function Server() {
 		console.log("Number of servers: "+serverlist.length);
 
 		ws.on('close', function() {
-			console.log("Client Disconnected");
+			console.log("Client Disconnected from "+ws._socket.remoteAddress);
 			if(!self.started) {
 				var index = self.players.indexOf(this);
 				if(index != -1) self.players.splice(index, 1);
@@ -65,9 +65,7 @@ function Server() {
 				for(var i=0; i<self.players.length; i++) {
 					if(!self.players[i].DC) return;
 				}
-				if(this.timed_out) {
-					self.stop("Endgame");
-				}
+				self.stop("Endgame");
 			}
 		});
 		
@@ -181,7 +179,7 @@ function Server() {
 		console.log("Number of servers: "+serverlist.length);
 		if(debug == "Timeout") {
 			//console.log("Timeout deletion.");
-			this.timed_out = true;
+			//this.timed_out = true;
 			for(var i in this.players)
 				this.players[i].close();
 			this.timeout = null;

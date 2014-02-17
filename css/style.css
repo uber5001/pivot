@@ -56,6 +56,7 @@ canvas {
 	right: 0;
 	margin: auto;
 	font-size: 2rem;
+	text-align: center;
 }
 img {
 	vertical-align: middle;
