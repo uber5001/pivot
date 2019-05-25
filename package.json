@@ -1,0 +1,24 @@
+{
+  "name": "pivot",
+  "version": "1.0.0",
+  "description": "<h1>Pivot</h1> <b>By Andrew Koroluk and Scott Little</b> Pivot is a derpy game made for a Microsoft Hackathon. You control two legs held together by a joint.",
+  "main": "server.js",
+  "dependencies": {
+    "ws": "^7.0.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/uber5001/pivot.git"
+  },
+  "author": "",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/uber5001/pivot/issues"
+  },
+  "homepage": "https://github.com/uber5001/pivot#readme"
+}

@@ -51,7 +51,7 @@ function newConnection() {
 	document.getElementById("hometext").style.display="none";
 
 	gameTest = undefined;
-	ws = new WebSocket("ws://scottlittle.me:8080");
+	ws = new WebSocket("ws://" + location.hostname + ":8080");
 	broadcast("Connecting to server...");
 	ws.addEventListener('message', function(e) {
 		var msg = JSON.parse(e.data);
