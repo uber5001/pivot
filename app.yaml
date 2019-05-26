@@ -1,0 +1,7 @@
+# See the link for app.yaml config options:
+# https://cloud.google.com/appengine/docs/standard/nodejs/config/appref
+runtime: nodejs8
+instance_class: F1
+automatic_scaling:
+  min_instances: 1
+  max_instances: 1

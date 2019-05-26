@@ -1,19 +1,22 @@
-import * as WebSocket from 'ws';
+import * as express from 'express';
+import * as expressWs from 'express-ws';
+import * as path from 'path';
 
 const PREGAME_TIMER = 30*1000;
 const MAX_GAME_TIMER = 30*60*1000;
 const MAXPLAYERS = 20;
 
-const wss = new WebSocket.Server({port: 8080});
+const app = express();
+const ews = expressWs(app);
+const port = process.env.PORT || 8080;
 
 const serverlist: Array<Server> = [];
 
-wss.on('connection', function(this: any, ws) {
+(<any>app).ws('/', function(this: any, ws: WebSocket, req: any) {
 
 	console.log("Client Connected");
 	
 	let hasJoined = false;
-	this.name = "Scott";
 	
 	for(const server of serverlist) {
 		if(server.started) continue;
@@ -27,6 +30,10 @@ wss.on('connection', function(this: any, ws) {
 	}
 	
 });
+
+app.use(express.static(path.join(__dirname, "..", "client")))
+
+app.listen(port, () => console.log(`Pivot express + ws server running on port ${port}`));
 
 class Server { 
 	private players: Array<any> = [];

@@ -48,7 +48,7 @@ window.addEventListener("load", () => {
     document.getElementById("hometext").style.display="none";
   
     gameTest = undefined;
-    ws = new WebSocket("ws://" + location.hostname + ":8080");
+    ws = new WebSocket("ws://" + location.host);
     broadcast("Connecting to server...");
     ws.addEventListener('message', function(e) {
       const msg = JSON.parse(e.data);

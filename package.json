@@ -2,14 +2,18 @@
   "name": "pivot",
   "version": "1.0.0",
   "description": "<h1>Pivot</h1> <b>By Andrew Koroluk and Scott Little</b> Pivot is a derpy game made for a Microsoft Hackathon. You control two legs held together by a joint.",
-  "main": "server.js",
+  "main": "dist/server/index.js",
   "types": "src/index.d.ts",
   "dependencies": {
     "box2dweb": "^2.1.0-b",
+    "express": "^4.17.1",
+    "express-ws": "^4.0.0",
     "ws": "^7.0.0"
   },
   "devDependencies": {
     "@types/box2d": "0.0.33",
+    "@types/express": "^4.16.1",
+    "@types/express-ws": "^3.0.0",
     "@types/ws": "^6.0.1",
     "clean-webpack-plugin": "^2.0.2",
     "copy-webpack-plugin": "^5.0.3",
@@ -21,8 +25,10 @@
     "webpack-merge": "^4.2.1"
   },
   "scripts": {
-    "start": "webpack --watch --config webpack.dev.js",
-    "build": "webpack --config webpack.prod.js"
+    "dev": "webpack --watch --config webpack.dev.js",
+    "build": "webpack --config webpack.prod.js",
+    "deploy": "webpack --config webpack.prod.js && gcloud app deploy",
+    "start": "node dist/server/index.js"
   },
   "repository": {
     "type": "git",
