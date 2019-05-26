@@ -1,14 +1,18 @@
-<h1>Pivot</h1>
-<b>By Andrew Koroluk and Scott Little</b>
-Pivot is a derpy game made for a Microsoft Hackathon. You control two legs held together by a joint.
+# Pivot
+
+Pivot is now hosted at [pivot.uber5001.com](http://pivot.uber5001.com/). Bring a friend there and play now!
+
+Pivot is a derpy game made for a Microsoft Hackathon. You control two legs held together by a joint. Currently, the goal is to get to the small triangle, or to throw your opponents off the edge.
  
-<h2>Important source files</h2>
-main.js - Main client js container<br />
-pivot.js - Rendering, etc.<br />
-platform.js - Platform objects<br />
-player.js - Definitions for Player object<br />
-server.js - Server, clients never get to see this<br />
-index.html - Basic HTML5 Canvas page for showing our pretty JS<br />
-style.css - You should know what this is<br />
-<br />
-Box2dWeb-2.1.a.3.min.js - Box2D Physics Engine<br />
+## Development
+
+ - install node; git clone the repo
+ - `npm install`
+ - `npm run dev`
+
+## Deployment to Google Compute Engine
+
+ - `docker build -t gcr.io/<GCPProjectNameHere>/<ImageNameHere> .`
+ - (Test that with `docker run gcr.io/<ProjectNameHere>/<ImageNameHere>`)
+ - `docker push gcr.io/<GCPProjectNameHere>/<ImageNameHere>`
+ - Create a new VM instance on GCE, and set to start from the container `gcr.io/<GCPProjectNameHere>/<ImageNameHere>`
