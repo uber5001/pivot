@@ -6,7 +6,6 @@ const CopyPlugin = require('copy-webpack-plugin');
 module.exports = [
   {
     entry: './src/index.ts',
-    mode: 'development',
     target: 'web',
     module: {
       rules: [
@@ -37,7 +36,6 @@ module.exports = [
     }
   }, {
     entry: './src/server.ts',
-    mode: 'development',
     target: 'node',
     module: {
       rules: [
