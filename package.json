@@ -6,7 +6,7 @@
   "types": "src/index.d.ts",
   "dependencies": {
     "box2dweb": "^2.1.0-b",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "express-ws": "^4.0.0",
     "ws": "^7.4.6"
   },
